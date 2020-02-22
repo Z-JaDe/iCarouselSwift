@@ -15,6 +15,17 @@
 		F91165F32400ECE3006FFEBC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F91165F12400ECE3006FFEBC /* LaunchScreen.storyboard */; };
 		F91165FE2400ECE3006FFEBC /* iCarouselSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91165FD2400ECE3006FFEBC /* iCarouselSwiftTests.swift */; };
 		F91166092400ECE3006FFEBC /* iCarouselSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91166082400ECE3006FFEBC /* iCarouselSwiftUITests.swift */; };
+		F91166182400FDE0006FFEBC /* iCarouselAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91166172400FDE0006FFEBC /* iCarouselAnimator.swift */; };
+		F911661C2400FEC8006FFEBC /* iCarouselDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F911661B2400FEC8006FFEBC /* iCarouselDataSource.swift */; };
+		F911661E2400FF04006FFEBC /* iCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F911661D2400FF04006FFEBC /* iCarousel.swift */; };
+		F911662024010044006FFEBC /* iCarouselDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F911661F24010044006FFEBC /* iCarouselDelegate.swift */; };
+		F911662224010886006FFEBC /* iCarousel+Gesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = F911662124010886006FFEBC /* iCarousel+Gesture.swift */; };
+		F911662424011BD1006FFEBC /* iCarousel+Scrolling.swift in Sources */ = {isa = PBXBuildFile; fileRef = F911662324011BD1006FFEBC /* iCarousel+Scrolling.swift */; };
+		F911662624012E52006FFEBC /* iCarousel+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F911662524012E52006FFEBC /* iCarousel+Animation.swift */; };
+		F911662824013230006FFEBC /* iCarousel+ViewManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = F911662724013230006FFEBC /* iCarousel+ViewManagement.swift */; };
+		F911662A24013A93006FFEBC /* iCarousel+ViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F911662924013A93006FFEBC /* iCarousel+ViewLayout.swift */; };
+		F91166C424017164006FFEBC /* iCarousel+ViewLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91166C324017164006FFEBC /* iCarousel+ViewLoading.swift */; };
+		F91166F92401811E006FFEBC /* iCarousel+ViewQueing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91166F82401811E006FFEBC /* iCarousel+ViewQueing.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +60,17 @@
 		F91166042400ECE3006FFEBC /* iCarouselSwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iCarouselSwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F91166082400ECE3006FFEBC /* iCarouselSwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCarouselSwiftUITests.swift; sourceTree = "<group>"; };
 		F911660A2400ECE3006FFEBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F91166172400FDE0006FFEBC /* iCarouselAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCarouselAnimator.swift; sourceTree = "<group>"; };
+		F911661B2400FEC8006FFEBC /* iCarouselDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCarouselDataSource.swift; sourceTree = "<group>"; };
+		F911661D2400FF04006FFEBC /* iCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCarousel.swift; sourceTree = "<group>"; };
+		F911661F24010044006FFEBC /* iCarouselDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCarouselDelegate.swift; sourceTree = "<group>"; };
+		F911662124010886006FFEBC /* iCarousel+Gesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "iCarousel+Gesture.swift"; sourceTree = "<group>"; };
+		F911662324011BD1006FFEBC /* iCarousel+Scrolling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "iCarousel+Scrolling.swift"; sourceTree = "<group>"; };
+		F911662524012E52006FFEBC /* iCarousel+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "iCarousel+Animation.swift"; sourceTree = "<group>"; };
+		F911662724013230006FFEBC /* iCarousel+ViewManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "iCarousel+ViewManagement.swift"; sourceTree = "<group>"; };
+		F911662924013A93006FFEBC /* iCarousel+ViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "iCarousel+ViewLayout.swift"; sourceTree = "<group>"; };
+		F91166C324017164006FFEBC /* iCarousel+ViewLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "iCarousel+ViewLoading.swift"; sourceTree = "<group>"; };
+		F91166F82401811E006FFEBC /* iCarousel+ViewQueing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "iCarousel+ViewQueing.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +101,7 @@
 		F91165DA2400ECE2006FFEBC = {
 			isa = PBXGroup;
 			children = (
+				F91166162400ED1D006FFEBC /* Sources */,
 				F91165E52400ECE2006FFEBC /* iCarouselSwift */,
 				F91165FC2400ECE3006FFEBC /* iCarouselSwiftTests */,
 				F91166072400ECE3006FFEBC /* iCarouselSwiftUITests */,
@@ -126,6 +149,24 @@
 				F911660A2400ECE3006FFEBC /* Info.plist */,
 			);
 			path = iCarouselSwiftUITests;
+			sourceTree = "<group>";
+		};
+		F91166162400ED1D006FFEBC /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				F91166172400FDE0006FFEBC /* iCarouselAnimator.swift */,
+				F911661B2400FEC8006FFEBC /* iCarouselDataSource.swift */,
+				F911661F24010044006FFEBC /* iCarouselDelegate.swift */,
+				F911661D2400FF04006FFEBC /* iCarousel.swift */,
+				F911662724013230006FFEBC /* iCarousel+ViewManagement.swift */,
+				F911662924013A93006FFEBC /* iCarousel+ViewLayout.swift */,
+				F91166F82401811E006FFEBC /* iCarousel+ViewQueing.swift */,
+				F91166C324017164006FFEBC /* iCarousel+ViewLoading.swift */,
+				F911662324011BD1006FFEBC /* iCarousel+Scrolling.swift */,
+				F911662524012E52006FFEBC /* iCarousel+Animation.swift */,
+				F911662124010886006FFEBC /* iCarousel+Gesture.swift */,
+			);
+			path = Sources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -261,7 +302,18 @@
 			files = (
 				F91165EB2400ECE2006FFEBC /* ViewController.swift in Sources */,
 				F91165E72400ECE2006FFEBC /* AppDelegate.swift in Sources */,
+				F911661C2400FEC8006FFEBC /* iCarouselDataSource.swift in Sources */,
 				F91165E92400ECE2006FFEBC /* SceneDelegate.swift in Sources */,
+				F911662024010044006FFEBC /* iCarouselDelegate.swift in Sources */,
+				F91166C424017164006FFEBC /* iCarousel+ViewLoading.swift in Sources */,
+				F911662624012E52006FFEBC /* iCarousel+Animation.swift in Sources */,
+				F911662424011BD1006FFEBC /* iCarousel+Scrolling.swift in Sources */,
+				F91166F92401811E006FFEBC /* iCarousel+ViewQueing.swift in Sources */,
+				F911662224010886006FFEBC /* iCarousel+Gesture.swift in Sources */,
+				F911662A24013A93006FFEBC /* iCarousel+ViewLayout.swift in Sources */,
+				F91166182400FDE0006FFEBC /* iCarouselAnimator.swift in Sources */,
+				F911661E2400FF04006FFEBC /* iCarousel.swift in Sources */,
+				F911662824013230006FFEBC /* iCarousel+ViewManagement.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,6 +487,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 553C2VE52E;
 				INFOPLIST_FILE = iCarouselSwift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -452,6 +505,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 553C2VE52E;
 				INFOPLIST_FILE = iCarouselSwift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
