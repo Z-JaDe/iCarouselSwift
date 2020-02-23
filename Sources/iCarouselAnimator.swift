@@ -224,13 +224,14 @@ extension iCarousel.Animator {
     open class CoverFlow: iCarousel.Animator {
         open internal(set) var tilt: CGFloat = 0.9
         public let isCoverFlow2: Bool
-        public init(isCoverFlow2: Bool) {
+        public init(isCoverFlow2: Bool = false) {
             self.isCoverFlow2 = isCoverFlow2
             super.init()
         }
         open override func configInit() {
             super.configInit()
             spacing = 0.25
+            offsetMultiplier = 2.0
         }
         func clampedOffset(_ offset: CGFloat, in carousel: iCarousel) -> CGFloat {
             var clampedOffset = max(-1.0, min(1.0, offset))
@@ -283,9 +284,9 @@ extension iCarousel.Animator {
         open override func configInit() {
             super.configInit()
             if inverted {
-                fadeMax = 0.0
-            } else {
                 fadeMin = 0.0
+            } else {
+                fadeMax = 0.0
             }
         }
         open override func transformForItemView(with offset: CGFloat, in carousel: iCarousel) -> CATransform3D {

@@ -88,6 +88,7 @@ extension iCarousel {
         }
         itemViews.forEach { (number, view) in
             guard !visibleIndices.contains(number) else {
+                visibleIndices.remove(number)
                 return
             }
             queue(view, at: number)

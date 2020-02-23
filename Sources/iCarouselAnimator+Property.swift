@@ -18,4 +18,8 @@ public extension iCarousel.Animator {
         self.offsetMultiplier = offsetMultiplier
         return self
     }
+    func spacing(_ spacing: CGFloat) -> Self {
+        self.spacing = spacing
+        return self
+    }
 }
