@@ -142,6 +142,7 @@ public class iCarousel: UIView {
     required init?(coder: NSCoder) {
         contentView = UIView()
         super.init(coder: coder)
+        configInit()
         contentView.frame = self.bounds
         if self.superview != nil {
             startAnimation()

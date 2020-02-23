@@ -65,23 +65,24 @@ extension iCarousel {
         if animated {
             UIView.animate(withDuration: 0.1, animations: {
                 self.queue(itemView: itemView)
+                itemView.getContainView?.layer.opacity = 0.0
             }, completion: { _ in
-                itemView.superview?.removeFromSuperview()
-            })
-            UIView.animate(withDuration: iCarousel.global.insertDuration, delay: 0.1, animations: {
-                self.removeView(at: index)
-                self.numberOfItems -= 1
-                self.isWrapEnabled = self.animator.isWrapEnabled
-                self.updateNumberOfVisibleItems()
-                self._scrollOffset = CGFloat(self.currentItemIndex)
-                self.didScroll()
-            }, completion: { _ in
-                self.depthSortViews()
+                itemView.getContainView?.removeFromSuperview()
+                UIView.animate(withDuration: iCarousel.global.insertDuration, delay: 0.1, animations: {
+                    self.removeView(at: index)
+                    self.numberOfItems -= 1
+                    self.isWrapEnabled = self.animator.isWrapEnabled
+                    self.updateNumberOfVisibleItems()
+                    self._scrollOffset = CGFloat(self.currentItemIndex)
+                    self.didScroll()
+                }, completion: { _ in
+                    self.depthSortViews()
+                })
             })
         } else {
             transactionAnimated(false) {
                 self.queue(itemView: itemView)
-                itemView.superview?.removeFromSuperview()
+                itemView.getContainView?.removeFromSuperview()
                 removeView(at: index)
                 self.removeView(at: index)
                 self.numberOfItems -= 1
@@ -119,7 +120,7 @@ extension iCarousel {
         }
     }
     public func reloadItem(at index: Int, animated: Bool) {
-        guard let containerView = self.itemView(at: index)?.superview else {
+        guard let containerView = self.itemView(at: index)?.getContainView else {
             return
         }
         if animated {
@@ -148,8 +149,7 @@ extension iCarousel {
     func clamped(index: Int) -> Int {
         if numberOfItems <= 0 {
             return -1
-        }
-        if isWrapEnabled {
+        }else if isWrapEnabled {
             let numberOfItems: CGFloat = CGFloat(self.numberOfItems)
             let index: CGFloat = CGFloat(index)
             return Int(index - floor(index / numberOfItems) * numberOfItems)

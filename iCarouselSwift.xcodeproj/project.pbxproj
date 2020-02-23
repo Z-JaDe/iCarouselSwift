@@ -26,6 +26,7 @@
 		F911662A24013A93006FFEBC /* iCarousel+ViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F911662924013A93006FFEBC /* iCarousel+ViewLayout.swift */; };
 		F91166C424017164006FFEBC /* iCarousel+ViewLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91166C324017164006FFEBC /* iCarousel+ViewLoading.swift */; };
 		F91166F92401811E006FFEBC /* iCarousel+ViewQueing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91166F82401811E006FFEBC /* iCarousel+ViewQueing.swift */; };
+		F981E5662402762A0084EB77 /* iCarouselAnimator+Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981E5652402762A0084EB77 /* iCarouselAnimator+Property.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		F911662924013A93006FFEBC /* iCarousel+ViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "iCarousel+ViewLayout.swift"; sourceTree = "<group>"; };
 		F91166C324017164006FFEBC /* iCarousel+ViewLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "iCarousel+ViewLoading.swift"; sourceTree = "<group>"; };
 		F91166F82401811E006FFEBC /* iCarousel+ViewQueing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "iCarousel+ViewQueing.swift"; sourceTree = "<group>"; };
+		F981E5652402762A0084EB77 /* iCarouselAnimator+Property.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "iCarouselAnimator+Property.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				F91166172400FDE0006FFEBC /* iCarouselAnimator.swift */,
+				F981E5652402762A0084EB77 /* iCarouselAnimator+Property.swift */,
 				F911661B2400FEC8006FFEBC /* iCarouselDataSource.swift */,
 				F911661F24010044006FFEBC /* iCarouselDelegate.swift */,
 				F911661D2400FF04006FFEBC /* iCarousel.swift */,
@@ -303,6 +306,7 @@
 				F91165EB2400ECE2006FFEBC /* ViewController.swift in Sources */,
 				F91165E72400ECE2006FFEBC /* AppDelegate.swift in Sources */,
 				F911661C2400FEC8006FFEBC /* iCarouselDataSource.swift in Sources */,
+				F981E5662402762A0084EB77 /* iCarouselAnimator+Property.swift in Sources */,
 				F91165E92400ECE2006FFEBC /* SceneDelegate.swift in Sources */,
 				F911662024010044006FFEBC /* iCarouselDelegate.swift in Sources */,
 				F91166C424017164006FFEBC /* iCarousel+ViewLoading.swift in Sources */,
@@ -489,6 +493,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 553C2VE52E;
 				INFOPLIST_FILE = iCarouselSwift/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -507,6 +512,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 553C2VE52E;
 				INFOPLIST_FILE = iCarouselSwift/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

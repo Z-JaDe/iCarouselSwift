@@ -8,34 +8,60 @@
 
 import Foundation
 import UIKit
-
 extension iCarousel {
+    class ContainView: UIView {
+        let index: Int
+        var child: UIView {
+            didSet {
+                oldValue.removeFromSuperview()
+                self.addSubview(self.child)
+                setNeedsLayout()
+            }
+        }
+        init(child: UIView, index: Int, frame: CGRect = .zero) {
+            self.child = child
+            self.index = index
+            super.init(frame: frame)
+            self.addSubview(child)
+            self.layer.opacity = 0
+        }
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        override func layoutSubviews() {
+            super.layoutSubviews()
+            child.frame.origin.x = (self.bounds.size.width - child.frame.size.width) / 2.0
+            child.frame.origin.y = (self.bounds.size.height - child.frame.size.height) / 2.0
+        }
+    }
+}
+extension UIView {
+    var getContainView: iCarousel.ContainView? {
+        superview as? iCarousel.ContainView
+    }
+}
+extension iCarousel {
+    /// 无动画 重新创建 ItemView，如果没有containerView则重新创建一个
     @discardableResult
-    func loadView(at index: Int, withContainerView containerView: UIView? = nil) -> UIView {
+    func loadView(at index: Int, withContainerView containerView: ContainView? = nil) -> UIView {
         transactionAnimated(false) {
             let view: UIView = createView(at: index)
             setItemView(view, forIndex: index)
             if let containerView = containerView {
-                if let oldItemView = containerView.subviews.last {
-                    queue(oldItemView, at: index)
-                    oldItemView.removeFromSuperview()
-                }
                 //set container frame
                 if isVertical {
-                    containerView.bounds.size.width = view.frame.size.width;
-                    containerView.bounds.size.height = min(itemWidth, view.frame.size.height);
+                    containerView.bounds.size.width = view.frame.size.width
+                    containerView.bounds.size.height = min(itemWidth, view.frame.size.height)
                 } else {
-                    containerView.bounds.size.width = min(itemWidth, view.frame.size.width);
-                    containerView.bounds.size.height = view.frame.size.height;
+                    containerView.bounds.size.width = min(itemWidth, view.frame.size.width)
+                    containerView.bounds.size.height = view.frame.size.height
                 }
-                //set view frame
-                view.frame.origin.x = (containerView.bounds.size.width - view.frame.size.width) / 2.0
-                view.frame.origin.y = (containerView.bounds.size.height - view.frame.size.height) / 2.0
-                containerView.addSubview(view)
+                queue(containerView.child, at: index)
+                containerView.child = view
             } else {
-                contentView.addSubview(self.containView(view))
+                contentView.addSubview(self.containView(view, index: index))
             }
-            view.superview?.layer.opacity = 0.0
+            view.getContainView?.layer.opacity = 0.0
             transformItemView(view, at: index)
             return view
         }
@@ -44,10 +70,10 @@ extension iCarousel {
         updateItemWidth()
         updateNumberOfVisibleItems()
         var visibleIndices = Set<Int>()
-        let minV = -Int(ceil(CGFloat(state.numberOfPlaceholdersToShow) / 2.0))
-        let maxV = numberOfItems - 1 + state.numberOfPlaceholdersToShow / 2
-        var offset = self.currentItemIndex - numberOfVisibleItems / 2;
-        if isWrapEnabled {
+        var offset = self.currentItemIndex - numberOfVisibleItems / 2
+        if !isWrapEnabled {
+            let minV = -Int(ceil(CGFloat(state.numberOfPlaceholdersToShow) / 2.0))
+            let maxV = numberOfItems - 1 + state.numberOfPlaceholdersToShow / 2
             offset = max(minV, min(maxV - numberOfVisibleItems + 1, offset))
         }
         (0..<numberOfVisibleItems).forEach { (i) in
@@ -65,7 +91,7 @@ extension iCarousel {
                 return
             }
             queue(view, at: number)
-            view.superview?.removeFromSuperview()
+            view.getContainView?.removeFromSuperview()
             itemViews[number] = nil
         }
         visibleIndices.forEach { (number) in
@@ -77,12 +103,10 @@ extension iCarousel {
     func reloadData() {
         //remove old views
         itemViews.values.forEach { (view) in
-            view.superview?.removeFromSuperview()
+            view.getContainView?.removeFromSuperview()
         }
         //bail out if not set up yet
-        guard let dataSource = dataSource else {
-            return
-        }
+        guard let dataSource = dataSource else { return }
         //get number of items and placeholders
         numberOfVisibleItems = 0
         numberOfItems = dataSource.numberOfItems(in: self)
@@ -100,6 +124,19 @@ extension iCarousel {
     }
 }
 extension iCarousel {
+    func containView(_ view: UIView, index: Int) -> ContainView {
+        //set item width
+        if itemWidth <= 0 {
+            itemWidth = view._relativeWidth(isVertical)
+        }
+        //set container frame
+        var frame = view.bounds
+        frame.size.width = isVertical ? frame.size.width : itemWidth
+        frame.size.height = isVertical ? itemWidth: frame.size.height
+        let containerView = ContainView(child: view, index: index, frame: frame)
+
+        return containerView
+    }
     private func createView(at index: Int) -> UIView {
         let view: UIView?
         if index < 0 {

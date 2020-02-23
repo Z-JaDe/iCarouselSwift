@@ -10,30 +10,16 @@ import Foundation
 import UIKit
 extension iCarousel {
     open class Animator {
-        open var fadeMin: CGFloat {
-            -.infinity
-        }
-        open var fadeMax: CGFloat {
-            .infinity
-        }
-        open var fadeRange: CGFloat {
-            1.0
-        }
-        open var fadeMinAlpha: CGFloat {
-            0.0
-        }
-        open var spacing: CGFloat {
-            0.0
-        }
-        open var arc: CGFloat {
-            .pi * 2.0
-        }
-        open var isWrapEnabled: Bool {
-            false
-        }
-        open var offsetMultiplier: CGFloat {
-            1.0
-        }
+        open internal(set) var fadeMin: CGFloat = -.infinity
+        open internal(set) var fadeMax: CGFloat = .infinity
+        open internal(set) var fadeRange: CGFloat = 1.0
+        open internal(set) var fadeMinAlpha: CGFloat = 0.0
+        open internal(set) var spacing: CGFloat = 1.0
+        open internal(set) var arc: CGFloat = .pi * 2.0
+        ///是否无限循环
+        open internal(set) var isWrapEnabled: Bool = false
+        /// 拖动时，视图移动速度
+        open internal(set) var offsetMultiplier: CGFloat = 1.0
         public init() {
             configInit()
         }
@@ -73,7 +59,7 @@ extension iCarousel {
     }
     open class CanBeInvertedAnimator: Animator {
         public let inverted: Bool
-        public init(inverted: Bool) {
+        public init(inverted: Bool = false) {
             self.inverted = inverted
             super.init()
         }
@@ -99,22 +85,27 @@ extension iCarousel.Animator {
     open class Linear: iCarousel.Animator {
         open override func transformForItemView(with offset: CGFloat, in carousel: iCarousel) -> CATransform3D {
             let transform = super.transformForItemView(with: offset, in: carousel)
+            let t1: CGFloat = offset * _itemWidth(in: carousel)
             if carousel.isVertical {
-                return CATransform3DTranslate(transform, 0.0, offset * _itemWidth(in: carousel), 0.0)
+                return CATransform3DTranslate(transform, 0.0, t1, 0.0)
             } else {
-                return CATransform3DTranslate(transform, offset * _itemWidth(in: carousel), 0.0, 0.0)
+                return CATransform3DTranslate(transform, t1, 0.0, 0.0)
             }
         }
         open override func numberOfVisibleItems(in carousel: iCarousel) -> Int {
             let width = carousel.relativeWidth
             let itemWidth = _itemWidth(in: carousel)
+            if itemWidth <= 0 {
+                return 0
+            }
             let numberOfVisibleItems = Int(ceil(width / itemWidth)) + 2
             return min(iCarousel.global.maxVisibleItems, numberOfVisibleItems)
         }
     }
     open class Rotary: iCarousel.CanBeInvertedAnimator {
-        open override var isWrapEnabled: Bool {
-            true
+        open override func configInit() {
+            super.configInit()
+            isWrapEnabled = true
         }
         open override func circularCarouselItemCount(in carousel: iCarousel) -> Int {
             _count2(in: carousel)
@@ -147,8 +138,9 @@ extension iCarousel.Animator {
         }
     }
     open class Cylinder: iCarousel.CanBeInvertedAnimator {
-        open override var isWrapEnabled: Bool {
-            true
+        open override func configInit() {
+            super.configInit()
+            isWrapEnabled = true
         }
         open override func circularCarouselItemCount(in carousel: iCarousel) -> Int {
             _count2(in: carousel)
@@ -191,8 +183,9 @@ extension iCarousel.Animator {
         }
     }
     open class Wheel: iCarousel.CanBeInvertedAnimator {
-        open override var isWrapEnabled: Bool {
-            true
+        open override func configInit() {
+            super.configInit()
+            isWrapEnabled = true
         }
         open override func circularCarouselItemCount(in carousel: iCarousel) -> Int {
             _count2(in: carousel)
@@ -229,16 +222,15 @@ extension iCarousel.Animator {
         }
     }
     open class CoverFlow: iCarousel.Animator {
-        open var tilt: CGFloat {
-            0.9
-        }
-        open override var spacing: CGFloat {
-            0.25
-        }
+        open internal(set) var tilt: CGFloat = 0.9
         public let isCoverFlow2: Bool
         public init(isCoverFlow2: Bool) {
             self.isCoverFlow2 = isCoverFlow2
             super.init()
+        }
+        open override func configInit() {
+            super.configInit()
+            spacing = 0.25
         }
         func clampedOffset(_ offset: CGFloat, in carousel: iCarousel) -> CGFloat {
             var clampedOffset = max(-1.0, min(1.0, offset))
@@ -270,12 +262,13 @@ extension iCarousel.Animator {
             let x = (clampedOffset * 0.5 * tilt + offset * spacing) * carousel.itemWidth
             let z = abs(clampedOffset) * -carousel.itemWidth * 0.5
             let pi_2 = CGFloat.pi / 2.0
+            let angle = -clampedOffset * pi_2 * tilt
             if carousel.isVertical {
                 transform = CATransform3DTranslate(transform, 0.0, x, z)
-                return CATransform3DRotate(transform, -clampedOffset * pi_2 * tilt, -1.0, 0.0, 0.0)
+                return CATransform3DRotate(transform, angle, -1.0, 0.0, 0.0)
             } else {
-                transform = CATransform3DTranslate(transform, x, 0.0, z);
-                return CATransform3DRotate(transform, -clampedOffset * pi_2 * tilt, 0.0, 1.0, 0.0)
+                transform = CATransform3DTranslate(transform, x, 0.0, z)
+                return CATransform3DRotate(transform, angle, 0.0, 1.0, 0.0)
             }
         }
         open override func numberOfVisibleItems(in carousel: iCarousel) -> Int {
@@ -286,20 +279,14 @@ extension iCarousel.Animator {
         }
     }
     open class TimeMachine: iCarousel.CanBeInvertedAnimator {
-        open var tilt: CGFloat {
-            0.3
-        }
-        open override var fadeMax: CGFloat {
+        open internal(set) var tilt: CGFloat = 0.3
+        open override func configInit() {
+            super.configInit()
             if inverted {
-                return 0.0
+                fadeMax = 0.0
+            } else {
+                fadeMin = 0.0
             }
-            return super.fadeMax
-        }
-        open override var fadeMin: CGFloat {
-            if !inverted {
-                return 0.0
-            }
-            return super.fadeMin
         }
         open override func transformForItemView(with offset: CGFloat, in carousel: iCarousel) -> CATransform3D {
             let transform = super.transformForItemView(with: offset, in: carousel)
@@ -309,10 +296,12 @@ extension iCarousel.Animator {
                 tilt = -tilt
                 offset = -offset
             }
+            let t1 = offset * carousel.itemWidth * tilt
+            let t2 = offset * _itemWidth(in: carousel)
             if carousel.isVertical {
-                return CATransform3DTranslate(transform, 0.0, offset * carousel.itemWidth * tilt, offset * _itemWidth(in: carousel))
+                return CATransform3DTranslate(transform, 0.0, t1, t2)
             } else {
-                return CATransform3DTranslate(transform, offset * carousel.itemWidth * tilt, 0.0, offset * _itemWidth(in: carousel))
+                return CATransform3DTranslate(transform, t1, 0.0, t2)
             }
         }
     }

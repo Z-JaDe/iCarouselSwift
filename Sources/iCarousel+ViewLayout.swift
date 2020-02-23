@@ -11,13 +11,13 @@ import UIKit
 
 extension iCarousel {
     func compareViewDepth(view1: UIView, view2: UIView) -> Bool {
-        let t1 = view1.superview?.layer.transform ?? CATransform3D()
-        let t2 = view2.superview?.layer.transform ?? CATransform3D()
+        let t1 = view1.getContainView?.layer.transform ?? CATransform3D()
+        let t2 = view2.getContainView?.layer.transform ?? CATransform3D()
         let z1 = t1.m13 + t1.m23 + t1.m33 + t1.m43
         let z2 = t2.m13 + t2.m23 + t2.m33 + t2.m43
         var difference = z1 - z2
         if difference == 0 {
-            let t3 = self.currentItemView?.superview?.layer.transform ?? CATransform3D()
+            let t3 = self.currentItemView?.getContainView?.layer.transform ?? CATransform3D()
             if self.isVertical {
                 let y1 = t1.m12 + t1.m22 + t1.m32 + t1.m42
                 let y2 = t2.m12 + t2.m22 + t2.m32 + t2.m42
@@ -34,7 +34,7 @@ extension iCarousel {
     }
     func depthSortViews() {
         itemViews.values.sorted(by: compareViewDepth).forEach { (view) in
-            contentView.bringSubviewToFront(view.superview!)
+            contentView.bringSubviewToFront(view.getContainView!)
         }
     }
 }
@@ -52,45 +52,26 @@ extension iCarousel {
         }
         return offset
     }
-    func containView(_ view: UIView) -> UIView {
-        //set item width
-        if itemWidth == 0 {
-            itemWidth = view._relativeWidth(isVertical)
-        }
-        //set container frame
-        var frame = view.bounds;
-        frame.size.width = isVertical ? frame.size.width : itemWidth
-        frame.size.height = isVertical ? itemWidth: frame.size.height
-        let containerView = UIView(frame: frame)
-            
-        //set view frame
-        view.frame.origin.x = (containerView.bounds.size.width - view.frame.size.width) / 2.0
-        view.frame.origin.y = (containerView.bounds.size.height - view.frame.size.height) / 2.0
-        containerView.addSubview(view)
-        containerView.layer.opacity = 0;
-
-        return containerView;
-    }
 }
 extension iCarousel {
     func transformItemView(_ view: UIView, at index: Int) {
         //calculate offset
         let offset = offsetForItem(at: index)
 
-        if let containerView = view.superview {
+        if let containerView = view.getContainView {
             //update alpha
             containerView.layer.opacity = Float(animator.alphaForItem(with: offset))
             //center view
             containerView.center = CGPoint(x: self.bounds.size.width/2.0 + contentOffset.width,
                                        y: self.bounds.size.height/2.0 + contentOffset.height)
             //enable/disable interaction
-            containerView.isUserInteractionEnabled = (!centerItemWhenSelected || index == self.currentItemIndex);
+            containerView.isUserInteractionEnabled = (!centerItemWhenSelected || index == self.currentItemIndex)
             //account for retina
             containerView.layer.rasterizationScale = UIScreen.main.scale
         }
         view.layoutIfNeeded()
         
-        if let containerView = view.superview {
+        if let containerView = view.getContainView {
             //special-case logic for CoverFlow2
             let clampedOffset = max(-1.0, min(1.0, offset))
             if isDecelerating ||
