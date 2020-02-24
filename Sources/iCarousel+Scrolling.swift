@@ -65,9 +65,9 @@ extension iCarousel {
         if animated {
             UIView.animate(withDuration: 0.1, animations: {
                 self.queue(itemView: itemView)
-                itemView.getContainView?.layer.opacity = 0.0
+                itemView.itemCell?.layer.opacity = 0.0
             }, completion: { _ in
-                itemView.getContainView?.removeFromSuperview()
+                itemView.itemCell?.removeFromSuperview()
                 UIView.animate(withDuration: iCarousel.global.insertDuration, delay: 0.1, animations: {
                     self.removeView(at: index)
                     self.numberOfItems -= 1
@@ -82,7 +82,7 @@ extension iCarousel {
         } else {
             transactionAnimated(false) {
                 self.queue(itemView: itemView)
-                itemView.getContainView?.removeFromSuperview()
+                itemView.itemCell?.removeFromSuperview()
                 removeView(at: index)
                 self.removeView(at: index)
                 self.numberOfItems -= 1
@@ -120,7 +120,7 @@ extension iCarousel {
         }
     }
     public func reloadItem(at index: Int, animated: Bool) {
-        guard let containerView = self.itemView(at: index)?.getContainView else {
+        guard let containerView = self.itemView(at: index)?.itemCell else {
             return
         }
         if animated {

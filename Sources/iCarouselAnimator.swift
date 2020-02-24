@@ -66,15 +66,15 @@ extension iCarousel {
     }
 }
 extension iCarousel.Animator {
-    open func _itemWidth(in carousel: iCarousel) -> CGFloat {
+    open func itemWidthWithSpacing(in carousel: iCarousel) -> CGFloat {
         carousel.itemWidth * spacing
     }
-    open func _count1(in carousel: iCarousel) -> Int {
+    public func _count1(in carousel: iCarousel) -> Int {
         carousel.numberOfItems + carousel.state.numberOfPlaceholdersToShow
     }
-    open func _count2(in carousel: iCarousel) -> Int {
+    public func _count2(in carousel: iCarousel) -> Int {
         let width = carousel.relativeWidth
-        var count = Int(ceil(width / _itemWidth(in: carousel)) * CGFloat.pi)
+        var count = Int(ceil(width / itemWidthWithSpacing(in: carousel)) * CGFloat.pi)
         count = min(iCarousel.global.maxVisibleItems, max(12, count))
         count = min(_count1(in: carousel), count)
         return count
@@ -85,7 +85,7 @@ extension iCarousel.Animator {
     open class Linear: iCarousel.Animator {
         open override func transformForItemView(with offset: CGFloat, in carousel: iCarousel) -> CATransform3D {
             let transform = super.transformForItemView(with: offset, in: carousel)
-            let t1: CGFloat = offset * _itemWidth(in: carousel)
+            let t1: CGFloat = offset * itemWidthWithSpacing(in: carousel)
             if carousel.isVertical {
                 return CATransform3DTranslate(transform, 0.0, t1, 0.0)
             } else {
@@ -94,7 +94,7 @@ extension iCarousel.Animator {
         }
         open override func numberOfVisibleItems(in carousel: iCarousel) -> Int {
             let width = carousel.relativeWidth
-            let itemWidth = _itemWidth(in: carousel)
+            let itemWidth = itemWidthWithSpacing(in: carousel)
             if itemWidth <= 0 {
                 return 0
             }
@@ -114,8 +114,8 @@ extension iCarousel.Animator {
             let transform = super.transformForItemView(with: offset, in: carousel)
             let count = CGFloat(circularCarouselItemCount(in: carousel))
             var radius = max(
-                _itemWidth(in: carousel) / 2,
-                _itemWidth(in: carousel) / 2 / tan(arc / 2.0 / count))
+                itemWidthWithSpacing(in: carousel) / 2,
+                itemWidthWithSpacing(in: carousel) / 2 / tan(arc / 2.0 / count))
             var angle = offset * arc / count
             if inverted {
                 radius = -radius
@@ -150,7 +150,7 @@ extension iCarousel.Animator {
             let count = CGFloat(circularCarouselItemCount(in: carousel))
             var radius = max(
                 0.01,
-                _itemWidth(in: carousel) / 2 / tan(arc / 2.0 / count))
+                itemWidthWithSpacing(in: carousel) / 2 / tan(arc / 2.0 / count))
             var angle = offset * arc / count
             if inverted {
                 radius = -radius
@@ -193,7 +193,7 @@ extension iCarousel.Animator {
         open override func transformForItemView(with offset: CGFloat, in carousel: iCarousel) -> CATransform3D {
             var transform = super.transformForItemView(with: offset, in: carousel)
             let count = CGFloat(circularCarouselItemCount(in: carousel))
-            var radius = _itemWidth(in: carousel) * count / arc
+            var radius = itemWidthWithSpacing(in: carousel) * count / arc
             var angle = arc / count
             if inverted {
                 radius = -radius
@@ -211,7 +211,7 @@ extension iCarousel.Animator {
         }
         open override func numberOfVisibleItems(in carousel: iCarousel) -> Int {
             let count = CGFloat(circularCarouselItemCount(in: carousel))
-            let radius = _itemWidth(in: carousel) * count / arc
+            let radius = itemWidthWithSpacing(in: carousel) * count / arc
             let numberOfVisibleItems: Int
             if radius - carousel.itemWidth / 2.0 < min(carousel.bounds.size.width, carousel.bounds.size.height) / 2.0 {
                 numberOfVisibleItems = Int(count)
@@ -274,7 +274,7 @@ extension iCarousel.Animator {
         }
         open override func numberOfVisibleItems(in carousel: iCarousel) -> Int {
             let width = carousel.relativeWidth
-            let itemWidth = _itemWidth(in: carousel)
+            let itemWidth = itemWidthWithSpacing(in: carousel)
             let numberOfVisibleItems = Int(ceil(width / itemWidth)) + 2
             return min(iCarousel.global.maxVisibleItems, numberOfVisibleItems)
         }
@@ -298,7 +298,7 @@ extension iCarousel.Animator {
                 offset = -offset
             }
             let t1 = offset * carousel.itemWidth * tilt
-            let t2 = offset * _itemWidth(in: carousel)
+            let t2 = offset * itemWidthWithSpacing(in: carousel)
             if carousel.isVertical {
                 return CATransform3DTranslate(transform, 0.0, t1, t2)
             } else {

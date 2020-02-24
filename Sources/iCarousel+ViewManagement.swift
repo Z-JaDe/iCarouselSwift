@@ -35,9 +35,9 @@ public extension iCarousel {
         return nil
     }
     func itemView(at point: CGPoint) -> UIView? {
-        itemViews.values.sorted(by: compareViewDepth).last { (view) -> Bool in
-            view.superview?.layer.hitTest(point) != nil
-        }
+        itemViews.values.compactMap{$0.itemCell}.sorted(by: compareViewDepth).last { (view) -> Bool in
+            view.layer.hitTest(point) != nil
+        }?.child
     }
 }
 extension iCarousel {

@@ -9,7 +9,8 @@
 import Foundation
 import UIKit
 extension iCarousel {
-    class ContainView: UIView {
+    /// 动画 形变 都是在这个视图上面做，item添加到ItemCell上居中显示
+    class ItemCell: UIView {
         let index: Int
         var child: UIView {
             didSet {
@@ -36,14 +37,14 @@ extension iCarousel {
     }
 }
 extension UIView {
-    var getContainView: iCarousel.ContainView? {
-        superview as? iCarousel.ContainView
+    var itemCell: iCarousel.ItemCell? {
+        superview as? iCarousel.ItemCell
     }
 }
 extension iCarousel {
     /// 无动画 重新创建 ItemView，如果没有containerView则重新创建一个
     @discardableResult
-    func loadView(at index: Int, withContainerView containerView: ContainView? = nil) -> UIView {
+    func loadView(at index: Int, withContainerView containerView: ItemCell? = nil) -> UIView {
         transactionAnimated(false) {
             let view: UIView = createView(at: index)
             setItemView(view, forIndex: index)
@@ -59,9 +60,9 @@ extension iCarousel {
                 queue(containerView.child, at: index)
                 containerView.child = view
             } else {
-                contentView.addSubview(self.containView(view, index: index))
+                contentView.addSubview(self.createItemCell(view, index: index))
             }
-            view.getContainView?.layer.opacity = 0.0
+            view.itemCell?.layer.opacity = 0.0
             transformItemView(view, at: index)
             return view
         }
@@ -92,7 +93,7 @@ extension iCarousel {
                 return
             }
             queue(view, at: number)
-            view.getContainView?.removeFromSuperview()
+            view.itemCell?.removeFromSuperview()
             itemViews[number] = nil
         }
         visibleIndices.forEach { (number) in
@@ -104,7 +105,7 @@ extension iCarousel {
     func reloadData() {
         //remove old views
         itemViews.values.forEach { (view) in
-            view.getContainView?.removeFromSuperview()
+            view.itemCell?.removeFromSuperview()
         }
         //bail out if not set up yet
         guard let dataSource = dataSource else { return }
@@ -125,16 +126,16 @@ extension iCarousel {
     }
 }
 extension iCarousel {
-    func containView(_ view: UIView, index: Int) -> ContainView {
+    func createItemCell(_ view: UIView, index: Int) -> ItemCell {
         //set item width
         if itemWidth <= 0 {
-            itemWidth = view._relativeWidth(isVertical)
+            self.itemWidth = view._relativeWidth(isVertical)
         }
         //set container frame
         var frame = view.bounds
         frame.size.width = isVertical ? frame.size.width : itemWidth
         frame.size.height = isVertical ? itemWidth: frame.size.height
-        let containerView = ContainView(child: view, index: index, frame: frame)
+        let containerView = ItemCell(child: view, index: index, frame: frame)
 
         return containerView
     }

@@ -26,6 +26,7 @@ extension iCarousel {
 }
 
 public class iCarousel: UIView {
+    ///一些滚动过程中临时保存的值
     struct State {
         var startTime: TimeInterval = 0
         var lastTime: TimeInterval = 0
@@ -38,10 +39,13 @@ public class iCarousel: UIView {
         var startVelocity: CGFloat = 0
         var toggleTime: TimeInterval = 0
         var previousTranslation: CGFloat = 0
+        ///如果isPagingEnabled为true 且 canAutoscroll 为true，自动滚动需要隔段时间滚动一次
+        var tempOnePageValue: CGFloat = 0
     }
     internal var state: State = State()
     internal var itemViewPool: Set<UIView> = []
     internal var placeholderViewPool: Set<UIView> = []
+    /// 保存ItemView及其对应的坐标
     internal var itemViews: [Int: UIView] = [:]
     internal var timer: Timer?
     // MARK: -
@@ -87,7 +91,7 @@ public class iCarousel: UIView {
     }
     public internal(set) var isWrapEnabled: Bool = false
     public var bounces: Bool = true
-    var _scrollOffset: CGFloat = .zero
+    internal var _scrollOffset: CGFloat = .zero
     public var scrollOffset: CGFloat {
         get { _scrollOffset }
         set { changeScrollOffset(newValue) }
@@ -113,14 +117,14 @@ public class iCarousel: UIView {
     public internal(set) var numberOfVisibleItems: Int = 0
     public internal(set) var itemWidth: CGFloat = 0
     public internal(set) var toggle: CGFloat = 0
-    public var autoscroll: CGFloat = .zero {
+    public var autoscroll: CGFloat = 0 {
         didSet {
             if canAutoscroll {
                 startAnimation()
             }
         }
     }
-    var canAutoscroll: Bool {
+    internal var canAutoscroll: Bool {
         return autoscroll != 0
     }
     public var stopAtItemBoundary: Bool = true

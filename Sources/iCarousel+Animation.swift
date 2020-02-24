@@ -13,7 +13,10 @@ extension iCarousel {
     func startAnimation() {
         if self.timer == nil {
             let timer = Timer(timeInterval: 1.0/60.0, repeats: true) { [weak self] (timer) in
-                self?.step()
+                guard let self = self else { return }
+                self.transactionAnimated(false) {
+                    self.step()
+                }
             }
             self.timer = timer
             RunLoop.main.add(timer, forMode: .default)
@@ -85,73 +88,83 @@ extension iCarousel {
     }
 }
 extension iCarousel {
-    @objc func step() {
-        transactionAnimated(false) {
-            let currentTime = CACurrentMediaTime()
-            var delta = CGFloat(currentTime - state.lastTime)
-            state.lastTime = currentTime
+    @objc private func step() {
+        let currentTime = CACurrentMediaTime()
+        var delta = CGFloat(currentTime - state.lastTime)
+        state.lastTime = currentTime
 
-            let floatErrorMargin = iCarousel.global.floatErrorMargin
-            if isScrolling && !isDragging {
-                let time = CGFloat(min(1.0, (currentTime - state.startTime) / state.scrollDuration))
-                delta = easeInOut(time: time)
-                _scrollOffset = state.startOffset + (state.endOffset - state.startOffset) * CGFloat(delta)
-                didScroll()
-                if time >= 1.0 {
-                    isScrolling = false
-                    depthSortViews()
-                    transactionAnimated(true) {
-                        delegate?.carouselDidEndScrollingAnimation(self)
-                    }
+        let floatErrorMargin = iCarousel.global.floatErrorMargin
+        if isScrolling && !isDragging {
+            let time = CGFloat(min(1.0, (currentTime - state.startTime) / state.scrollDuration))
+            delta = easeInOut(time: time)
+            _scrollOffset = state.startOffset + (state.endOffset - state.startOffset) * CGFloat(delta)
+            didScroll()
+            if time >= 1.0 {
+                isScrolling = false
+                depthSortViews()
+                transactionAnimated(true) {
+                    delegate?.carouselDidEndScrollingAnimation(self)
                 }
-            } else if isDecelerating {
-                let time = CGFloat(min(state.scrollDuration, currentTime - state.startTime))
-                let scrollDuration = CGFloat(state.scrollDuration)
-                let acceleration = -state.startVelocity / scrollDuration
-                let distance = state.startVelocity * time + 0.5 * acceleration * pow(time, 2.0)
-                _scrollOffset = state.startOffset + distance
-                didScroll()
-                if abs(time - scrollDuration) < floatErrorMargin {
-                    isDecelerating = false
-                    transactionAnimated(true) {
-                        delegate?.carouselDidEndDecelerating(self)
-                    }
-                    
-                    if (scrollToItemBoundary || abs(scrollOffset - clamped(offset: scrollOffset)) > floatErrorMargin) && !canAutoscroll {
-                        if abs(scrollOffset - CGFloat(self.currentItemIndex)) < floatErrorMargin {
-                            //call scroll to trigger events for legacy support reasons
-                            //even though technically we don't need to scroll at all
-                            scrollToItem(at: self.currentItemIndex, duration: 0.01)
-                        } else {
-                            scrollToItem(at: self.currentItemIndex, animated: true)
-                        }
-                    } else {
-                        var difference = round(scrollOffset) - scrollOffset
-                        if difference > 0.5 {
-                            difference = difference - 1.0
-                        } else if difference < -0.5 {
-                            difference = 1.0 + difference
-                        }
-                        let maxToggleDuration = iCarousel.global.maxToggleDuration
-                        state.toggleTime = TimeInterval(CGFloat(currentTime) - maxToggleDuration * abs(difference))
-                        toggle = max(-1.0, min(1.0, -difference))
-                    }
-                }
-            } else if canAutoscroll && !isDragging {
-                //autoscroll goes backwards from what you'd expect, for historical reasons
-                self.scrollOffset = clamped(offset: scrollOffset - delta * autoscroll)
-            } else if abs(toggle) > floatErrorMargin {
-                var toggleDuration = state.startVelocity > 0 ? min(1.0, max(0.0, 1.0 / abs(state.startVelocity))): 1.0
-                let minToggleDuration = iCarousel.global.minToggleDuration
-                let maxToggleDuration = iCarousel.global.maxToggleDuration
-                toggleDuration = minToggleDuration + (maxToggleDuration - minToggleDuration) * toggleDuration
-                let time = min(1.0, CGFloat(currentTime - state.toggleTime) / toggleDuration)
-                delta = easeInOut(time: time)
-                toggle = toggle < 0.0 ? (delta - 1.0) : (1.0 - delta)
-                didScroll()
-            } else if !canAutoscroll {
-                stopAnimation()
             }
+        } else if isDecelerating {
+            let time = CGFloat(min(state.scrollDuration, currentTime - state.startTime))
+            let scrollDuration = CGFloat(state.scrollDuration)
+            let acceleration = -state.startVelocity / scrollDuration
+            let distance = state.startVelocity * time + 0.5 * acceleration * pow(time, 2.0)
+            _scrollOffset = state.startOffset + distance
+            didScroll()
+            if abs(time - scrollDuration) < floatErrorMargin {
+                isDecelerating = false
+                transactionAnimated(true) {
+                    delegate?.carouselDidEndDecelerating(self)
+                }
+                
+                if (scrollToItemBoundary || abs(scrollOffset - clamped(offset: scrollOffset)) > floatErrorMargin) && !canAutoscroll {
+                    if abs(scrollOffset - CGFloat(self.currentItemIndex)) < floatErrorMargin {
+                        //call scroll to trigger events for legacy support reasons
+                        //even though technically we don't need to scroll at all
+                        scrollToItem(at: self.currentItemIndex, duration: 0.01)
+                    } else {
+                        scrollToItem(at: self.currentItemIndex, animated: true)
+                    }
+                } else {
+                    var difference = round(scrollOffset) - scrollOffset
+                    if difference > 0.5 {
+                        difference = difference - 1.0
+                    } else if difference < -0.5 {
+                        difference = 1.0 + difference
+                    }
+                    let maxToggleDuration = iCarousel.global.maxToggleDuration
+                    state.toggleTime = TimeInterval(CGFloat(currentTime) - maxToggleDuration * abs(difference))
+                    toggle = max(-1.0, min(1.0, -difference))
+                }
+            }
+        } else if canAutoscroll && !isDragging {
+            //autoscroll goes backwards from what you'd expect, for historical reasons
+            if self.isPagingEnabled {
+                state.tempOnePageValue += delta * autoscroll
+                if abs(state.tempOnePageValue) >= 1 {
+                    let tempScrollOffset = clamped(offset: scrollOffset - max(-1, min(1, state.tempOnePageValue)))
+                    state.tempOnePageValue = 0
+                    scrollToItem(at: Int(tempScrollOffset), animated: true)
+                }
+            } else {
+                if state.tempOnePageValue != 0 {
+                    state.tempOnePageValue = 0
+                }
+                self.scrollOffset = clamped(offset: scrollOffset - delta * autoscroll)
+            }
+        } else if abs(toggle) > floatErrorMargin {
+            var toggleDuration = state.startVelocity > 0 ? min(1.0, max(0.0, 1.0 / abs(state.startVelocity))): 1.0
+            let minToggleDuration = iCarousel.global.minToggleDuration
+            let maxToggleDuration = iCarousel.global.maxToggleDuration
+            toggleDuration = minToggleDuration + (maxToggleDuration - minToggleDuration) * toggleDuration
+            let time = min(1.0, CGFloat(currentTime - state.toggleTime) / toggleDuration)
+            delta = easeInOut(time: time)
+            toggle = toggle < 0.0 ? (delta - 1.0) : (1.0 - delta)
+            didScroll()
+        } else if !canAutoscroll {
+            stopAnimation()
         }
     }
     func didScroll() {

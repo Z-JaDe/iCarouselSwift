@@ -10,14 +10,14 @@ import Foundation
 import UIKit
 
 extension iCarousel {
-    func compareViewDepth(view1: UIView, view2: UIView) -> Bool {
-        let t1 = view1.getContainView?.layer.transform ?? CATransform3D()
-        let t2 = view2.getContainView?.layer.transform ?? CATransform3D()
+    func compareViewDepth(view1: ItemCell, view2: ItemCell) -> Bool {
+        let t1 = view1.layer.transform
+        let t2 = view2.layer.transform
         let z1 = t1.m13 + t1.m23 + t1.m33 + t1.m43
         let z2 = t2.m13 + t2.m23 + t2.m33 + t2.m43
         var difference = z1 - z2
-        if difference == 0 {
-            let t3 = self.currentItemView?.getContainView?.layer.transform ?? CATransform3D()
+        if difference == 0, let currentItemCell = self.currentItemView?.itemCell {
+            let t3 = currentItemCell.layer.transform
             if self.isVertical {
                 let y1 = t1.m12 + t1.m22 + t1.m32 + t1.m42
                 let y2 = t2.m12 + t2.m22 + t2.m32 + t2.m42
@@ -33,12 +33,13 @@ extension iCarousel {
         return difference < 0
     }
     func depthSortViews() {
-        itemViews.values.sorted(by: compareViewDepth).forEach { (view) in
-            contentView.bringSubviewToFront(view.getContainView!)
+        itemViews.values.compactMap{$0.itemCell}.sorted(by: compareViewDepth).forEach { (view) in
+            contentView.bringSubviewToFront(view)
         }
     }
 }
 extension iCarousel {
+    ///计算相对于当前Item的偏移量
     public func offsetForItem(at index: Int) -> CGFloat {
         //calculate relative position
         var offset = CGFloat(index) - scrollOffset
@@ -54,52 +55,54 @@ extension iCarousel {
     }
 }
 extension iCarousel {
-    func transformItemView(_ view: UIView, at index: Int) {
+    /// 更新itemView对应的ItemCell的形变透明度等参数
+    func transformItemView(_ itemView: UIView, at index: Int) {
         //calculate offset
         let offset = offsetForItem(at: index)
 
-        if let containerView = view.getContainView {
-            //update alpha
-            containerView.layer.opacity = Float(animator.alphaForItem(with: offset))
-            //center view
-            containerView.center = CGPoint(x: self.bounds.size.width/2.0 + contentOffset.width,
+        guard let cell = itemView.itemCell else {
+            itemView.layoutIfNeeded()
+            return
+        }
+        //update alpha
+        cell.layer.opacity = Float(animator.alphaForItem(with: offset))
+        //center view
+        cell.center = CGPoint(x: self.bounds.size.width/2.0 + contentOffset.width,
                                        y: self.bounds.size.height/2.0 + contentOffset.height)
-            //enable/disable interaction
-            containerView.isUserInteractionEnabled = (!centerItemWhenSelected || index == self.currentItemIndex)
-            //account for retina
-            containerView.layer.rasterizationScale = UIScreen.main.scale
-        }
-        view.layoutIfNeeded()
+        //enable/disable interaction
+        cell.isUserInteractionEnabled = (!centerItemWhenSelected || index == self.currentItemIndex)
+        //account for retina
+        cell.layer.rasterizationScale = UIScreen.main.scale
+    
+        itemView.layoutIfNeeded()
         
-        if let containerView = view.getContainView {
-            //special-case logic for CoverFlow2
-            let clampedOffset = max(-1.0, min(1.0, offset))
-            if isDecelerating ||
-                (isScrolling && !isDragging && !didDrag) ||
-                (canAutoscroll && !isDragging) ||
-                (!isWrapEnabled && (scrollOffset < 0 || scrollOffset >= CGFloat(numberOfItems - 1))) {
-                if offset > 0 {
-                    toggle = offset <= 0.5 ? -clampedOffset : (1.0 - clampedOffset)
-                } else {
-                    toggle = offset > -0.5 ? -clampedOffset : (-1.0 - clampedOffset)
-                }
+        //special-case logic for CoverFlow2
+        let clampedOffset = max(-1.0, min(1.0, offset))
+        if isDecelerating ||
+            (isScrolling && !isDragging && !didDrag) ||
+            (canAutoscroll && !isDragging) ||
+            (!isWrapEnabled && (scrollOffset < 0 || scrollOffset >= CGFloat(numberOfItems - 1))) {
+            if offset > 0 {
+                toggle = offset <= 0.5 ? -clampedOffset : (1.0 - clampedOffset)
+            } else {
+                toggle = offset > -0.5 ? -clampedOffset : (-1.0 - clampedOffset)
             }
-            
-            //calculate transform
-            let transform = animator.transformForItemView(with: offset, in: self)
-            //transform view
-            containerView.layer.transform = transform
-            
-            //backface culling
-            var showBackfaces = view.layer.isDoubleSided
-            if showBackfaces {
-                showBackfaces = animator.showBackfaces(view: view, in: self)
-            }
-            
-            //we can't just set the layer.doubleSided property because it doesn't block interaction
-            //instead we'll calculate if the view is front-facing based on the transform
-            containerView.isHidden = !(showBackfaces ? showBackfaces : (transform.m33 > 0.0))
         }
+        
+        //calculate transform
+        let transform = animator.transformForItemView(with: offset, in: self)
+        //transform view
+        cell.layer.transform = transform
+        
+        //backface culling
+        var showBackfaces = itemView.layer.isDoubleSided
+        if showBackfaces {
+            showBackfaces = animator.showBackfaces(view: itemView, in: self)
+        }
+        
+        //we can't just set the layer.doubleSided property because it doesn't block interaction
+        //instead we'll calculate if the view is front-facing based on the transform
+        cell.isHidden = !(showBackfaces ? showBackfaces : (transform.m33 > 0.0))
     }
     func transformItemViews() {
         itemViews.forEach { transformItemView($0.value, at: $0.key) }
