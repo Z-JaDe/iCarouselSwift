@@ -52,35 +52,41 @@ extension iCarousel {
             delegate?.carouselWillBeginDragging(self)
         case .ended, .cancelled, .failed:
             isDragging = false
-            didDrag = true
+            state.didDrag = true
             if shouldDecelerate() {
-                didDrag = false
+                state.didDrag = false
                 startDecelerating()
             }
             transactionAnimated(true) {
                 delegate?.carouselDidEndDragging(self, willDecelerate: isDecelerating)
             }
-            
-            if !isDecelerating {
-                let floatErrorMargin = iCarousel.global.floatErrorMargin
-                if (scrollToItemBoundary || abs(scrollOffset - clamped(offset: scrollOffset)) > floatErrorMargin) && !canAutoscroll {
-                    if abs(scrollOffset - CGFloat(self.currentItemIndex)) < floatErrorMargin {
-                        //call scroll to trigger events for legacy support reasons
-                        //even though technically we don't need to scroll at all
-                        scrollToItem(at: self.currentItemIndex, duration: 0.01)
-                    } else if shouldScroll() {
-                        let direction = Int(state.startVelocity / abs(state.startVelocity))
-                        scrollToItem(at: self.currentItemIndex + direction, animated: true)
-                    } else {
-                        scrollToItem(at: self.currentItemIndex, animated: true)
-                    }
-                } else {
-                    depthSortViews()
-                }
-            } else {
+            ///不需要减速 可以往下走
+            guard !isDecelerating else {
                 transactionAnimated(true) {
                     delegate?.carouselWillBeginDecelerating(self)
                 }
+                break
+            }
+            /// isPagingEnabled优先级比 scrollToItemBoundary高
+            if isPagingEnabled {
+                scrollToItem(at: self.currentItemIndex, animated: true)
+                break
+            }
+            let floatErrorMargin = iCarousel.global.floatErrorMargin
+            /// 滚动到Item边界
+            guard (scrollToItemBoundary || abs(scrollOffset - clamped(offset: scrollOffset)) > floatErrorMargin) && !canAutoscroll else {
+                depthSortViews()
+                break
+            }
+            if abs(scrollOffset - CGFloat(self.currentItemIndex)) < floatErrorMargin {
+                //call scroll to trigger events for legacy support reasons
+                //even though technically we don't need to scroll at all
+                scrollToItem(at: self.currentItemIndex, duration: 0.01)
+            } else if shouldScroll() { //是否需要滚动
+                let direction = Int(state.startVelocity / abs(state.startVelocity))
+                scrollToItem(at: self.currentItemIndex + direction, animated: true)
+            } else {
+                scrollToItem(at: self.currentItemIndex, animated: true)
             }
         case .changed:
             let _translation = pan.translation(in: self)

@@ -107,8 +107,8 @@ extension iCarousel {
                 }
             }
         } else if isDecelerating {
-            let time = CGFloat(min(state.scrollDuration, currentTime - state.startTime))
             let scrollDuration = CGFloat(state.scrollDuration)
+            let time = min(scrollDuration, CGFloat(currentTime - state.startTime))
             let acceleration = -state.startVelocity / scrollDuration
             let distance = state.startVelocity * time + 0.5 * acceleration * pow(time, 2.0)
             _scrollOffset = state.startOffset + distance
@@ -150,6 +150,7 @@ extension iCarousel {
                 }
             } else {
                 if state.tempOnePageValue != 0 {
+                    // isPagingEnabled更改时 有可能导致存储的旧值，需要清零
                     state.tempOnePageValue = 0
                 }
                 self.scrollOffset = clamped(offset: scrollOffset - delta * autoscroll)

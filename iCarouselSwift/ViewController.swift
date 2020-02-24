@@ -19,7 +19,7 @@ class ViewController: UIViewController {
         carousel.delegate = self
         carousel.dataSource = self
         carousel.isPagingEnabled = true
-        carousel.autoscroll = -0.5
+//        carousel.autoscroll = -1
     }
 
     @IBAction func deleteItem(_ sender: UIBarButtonItem) {

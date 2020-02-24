@@ -79,7 +79,7 @@ extension iCarousel {
         //special-case logic for CoverFlow2
         let clampedOffset = max(-1.0, min(1.0, offset))
         if isDecelerating ||
-            (isScrolling && !isDragging && !didDrag) ||
+            (isScrolling && !isDragging && !state.didDrag) ||
             (canAutoscroll && !isDragging) ||
             (!isWrapEnabled && (scrollOffset < 0 || scrollOffset >= CGFloat(numberOfItems - 1))) {
             if offset > 0 {

@@ -39,6 +39,7 @@ public class iCarousel: UIView {
         var startVelocity: CGFloat = 0
         var toggleTime: TimeInterval = 0
         var previousTranslation: CGFloat = 0
+        var didDrag: Bool = false
         ///如果isPagingEnabled为true 且 canAutoscroll 为true，自动滚动需要隔段时间滚动一次
         var tempOnePageValue: CGFloat = 0
     }
@@ -131,9 +132,18 @@ public class iCarousel: UIView {
     public var scrollToItemBoundary: Bool = true
     public var ignorePerpendicularSwipes: Bool = true
     public var centerItemWhenSelected: Bool = true
-    
-    internal var didDrag: Bool = false
-    public internal(set) var isDragging: Bool = false
+
+    public internal(set) var isDragging: Bool = false {
+        didSet {
+            if !isDragging && oldValue {
+                if autoscroll > 0 {
+                    state.tempOnePageValue = scrollOffset - scrollOffset.rounded(.towardZero)
+                } else if autoscroll < 0 {
+                    state.tempOnePageValue = scrollOffset.rounded(.towardZero) - scrollOffset
+                }
+            }
+        }
+    }
     public internal(set) var isDecelerating: Bool = false
     public internal(set) var isScrolling: Bool = false
     // MARK: -
