@@ -14,7 +14,6 @@
 		F91165F02400ECE3006FFEBC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F91165EF2400ECE3006FFEBC /* Assets.xcassets */; };
 		F91165F32400ECE3006FFEBC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F91165F12400ECE3006FFEBC /* LaunchScreen.storyboard */; };
 		F91165FE2400ECE3006FFEBC /* iCarouselSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91165FD2400ECE3006FFEBC /* iCarouselSwiftTests.swift */; };
-		F91166092400ECE3006FFEBC /* iCarouselSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91166082400ECE3006FFEBC /* iCarouselSwiftUITests.swift */; };
 		F91166182400FDE0006FFEBC /* iCarouselAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91166172400FDE0006FFEBC /* iCarouselAnimator.swift */; };
 		F911661C2400FEC8006FFEBC /* iCarouselDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F911661B2400FEC8006FFEBC /* iCarouselDataSource.swift */; };
 		F911661E2400FF04006FFEBC /* iCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F911661D2400FF04006FFEBC /* iCarousel.swift */; };
@@ -37,13 +36,6 @@
 			remoteGlobalIDString = F91165E22400ECE2006FFEBC;
 			remoteInfo = iCarouselSwift;
 		};
-		F91166052400ECE3006FFEBC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F91165DB2400ECE2006FFEBC /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F91165E22400ECE2006FFEBC;
-			remoteInfo = iCarouselSwift;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -58,7 +50,6 @@
 		F91165F92400ECE3006FFEBC /* iCarouselSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iCarouselSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F91165FD2400ECE3006FFEBC /* iCarouselSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCarouselSwiftTests.swift; sourceTree = "<group>"; };
 		F91165FF2400ECE3006FFEBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F91166042400ECE3006FFEBC /* iCarouselSwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iCarouselSwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F91166082400ECE3006FFEBC /* iCarouselSwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCarouselSwiftUITests.swift; sourceTree = "<group>"; };
 		F911660A2400ECE3006FFEBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F91166172400FDE0006FFEBC /* iCarouselAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCarouselAnimator.swift; sourceTree = "<group>"; };
@@ -90,13 +81,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F91166012400ECE3006FFEBC /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -116,7 +100,6 @@
 			children = (
 				F91165E32400ECE2006FFEBC /* iCarouselSwift.app */,
 				F91165F92400ECE3006FFEBC /* iCarouselSwiftTests.xctest */,
-				F91166042400ECE3006FFEBC /* iCarouselSwiftUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -210,24 +193,6 @@
 			productReference = F91165F92400ECE3006FFEBC /* iCarouselSwiftTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		F91166032400ECE3006FFEBC /* iCarouselSwiftUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F91166132400ECE3006FFEBC /* Build configuration list for PBXNativeTarget "iCarouselSwiftUITests" */;
-			buildPhases = (
-				F91166002400ECE3006FFEBC /* Sources */,
-				F91166012400ECE3006FFEBC /* Frameworks */,
-				F91166022400ECE3006FFEBC /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				F91166062400ECE3006FFEBC /* PBXTargetDependency */,
-			);
-			name = iCarouselSwiftUITests;
-			productName = iCarouselSwiftUITests;
-			productReference = F91166042400ECE3006FFEBC /* iCarouselSwiftUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -242,10 +207,6 @@
 						CreatedOnToolsVersion = 11.3.1;
 					};
 					F91165F82400ECE3006FFEBC = {
-						CreatedOnToolsVersion = 11.3.1;
-						TestTargetID = F91165E22400ECE2006FFEBC;
-					};
-					F91166032400ECE3006FFEBC = {
 						CreatedOnToolsVersion = 11.3.1;
 						TestTargetID = F91165E22400ECE2006FFEBC;
 					};
@@ -266,7 +227,6 @@
 			targets = (
 				F91165E22400ECE2006FFEBC /* iCarouselSwift */,
 				F91165F82400ECE3006FFEBC /* iCarouselSwiftTests */,
-				F91166032400ECE3006FFEBC /* iCarouselSwiftUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -283,13 +243,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F91165F72400ECE3006FFEBC /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F91166022400ECE3006FFEBC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -329,14 +282,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F91166002400ECE3006FFEBC /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F91166092400ECE3006FFEBC /* iCarouselSwiftUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -344,11 +289,6 @@
 			isa = PBXTargetDependency;
 			target = F91165E22400ECE2006FFEBC /* iCarouselSwift */;
 			targetProxy = F91165FA2400ECE3006FFEBC /* PBXContainerItemProxy */;
-		};
-		F91166062400ECE3006FFEBC /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F91165E22400ECE2006FFEBC /* iCarouselSwift */;
-			targetProxy = F91166052400ECE3006FFEBC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -566,44 +506,6 @@
 			};
 			name = Release;
 		};
-		F91166142400ECE3006FFEBC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = iCarouselSwiftUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zjade.iCarouselSwiftUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = iCarouselSwift;
-			};
-			name = Debug;
-		};
-		F91166152400ECE3006FFEBC /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = iCarouselSwiftUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zjade.iCarouselSwiftUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = iCarouselSwift;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -630,15 +532,6 @@
 			buildConfigurations = (
 				F91166112400ECE3006FFEBC /* Debug */,
 				F91166122400ECE3006FFEBC /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		F91166132400ECE3006FFEBC /* Build configuration list for PBXNativeTarget "iCarouselSwiftUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F91166142400ECE3006FFEBC /* Debug */,
-				F91166152400ECE3006FFEBC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
