@@ -54,7 +54,7 @@ extension iCarousel {
     public func scrollToItem(at index: Int, animated: Bool) {
         scrollToItem(at: index, duration: animated ? iCarousel.global.scrollDuration : 0)
     }
-    
+
 }
 extension iCarousel {
     public func removeItem(at index: Int, animated: Bool) {
@@ -87,7 +87,7 @@ extension iCarousel {
                 self.removeView(at: index)
                 self.numberOfItems -= 1
                 self.isWrapEnabled = self.animator.isWrapEnabled
-                // TODO: updateNumberOfVisibleItems是否需要加
+                // updateNumberOfVisibleItems是否需要加
                 self._scrollOffset = CGFloat(self.currentItemIndex)
                 self.didScroll()
                 self.depthSortViews()
@@ -149,7 +149,7 @@ extension iCarousel {
     func clamped(index: Int) -> Int {
         if numberOfItems <= 0 {
             return -1
-        }else if isWrapEnabled {
+        } else if isWrapEnabled {
             let numberOfItems: CGFloat = CGFloat(self.numberOfItems)
             let index: CGFloat = CGFloat(index)
             return Int(index - floor(index / numberOfItems) * numberOfItems)
@@ -159,7 +159,7 @@ extension iCarousel {
     }
 }
 extension iCarousel {
-    func minScrollDistance<T>(from: T, to: T, numberOfItems: T) -> T where T : Comparable, T : SignedNumeric {
+    func minScrollDistance<T>(from: T, to: T, numberOfItems: T) -> T where T: Comparable, T: SignedNumeric {
         let directDistance = to - from
         if isWrapEnabled {
             var wrappedDistance = min(to, from) + numberOfItems - max(to, from)

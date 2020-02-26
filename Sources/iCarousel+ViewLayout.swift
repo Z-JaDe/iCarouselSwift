@@ -33,7 +33,7 @@ extension iCarousel {
         return difference < 0
     }
     func depthSortViews() {
-        itemViews.values.compactMap{$0.itemCell}.sorted(by: compareViewDepth).forEach { (view) in
+        itemViews.values.compactMap {$0.itemCell}.sorted(by: compareViewDepth).forEach { (view) in
             contentView.bringSubviewToFront(view)
         }
     }
@@ -73,9 +73,9 @@ extension iCarousel {
         cell.isUserInteractionEnabled = (!centerItemWhenSelected || index == self.currentItemIndex)
         //account for retina
         cell.layer.rasterizationScale = UIScreen.main.scale
-    
+
         itemView.layoutIfNeeded()
-        
+
         //special-case logic for CoverFlow2
         let clampedOffset = max(-1.0, min(1.0, offset))
         if isDecelerating ||
@@ -88,18 +88,18 @@ extension iCarousel {
                 toggle = offset > -0.5 ? -clampedOffset : (-1.0 - clampedOffset)
             }
         }
-        
+
         //calculate transform
         let transform = animator.transformForItemView(with: offset, in: self)
         //transform view
         cell.layer.transform = transform
-        
+
         //backface culling
         var showBackfaces = itemView.layer.isDoubleSided
         if showBackfaces {
             showBackfaces = animator.showBackfaces(view: itemView, in: self)
         }
-        
+
         //we can't just set the layer.doubleSided property because it doesn't block interaction
         //instead we'll calculate if the view is front-facing based on the transform
         cell.isHidden = !(showBackfaces ? showBackfaces : (transform.m33 > 0.0))

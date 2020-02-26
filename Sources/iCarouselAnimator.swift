@@ -307,4 +307,3 @@ extension iCarousel.Animator {
         }
     }
 }
-

@@ -29,7 +29,7 @@ extension iCarousel {
                     scrollToItem(at: index, animated: true)
                 }
                 delegate?.carousel(self, didSelectItemAt: index)
-            } else if (isScrollEnabled && scrollToItemBoundary && canAutoscroll) {
+            } else if isScrollEnabled && scrollToItemBoundary && canAutoscroll {
                 scrollToItem(at: self.currentItemIndex, animated: true)
             }
         } else {
@@ -38,10 +38,10 @@ extension iCarousel {
     }
 }
 extension iCarousel {
+    // swiftlint:disable cyclomatic_complexity
+    // swiftlint:disable function_body_length
     @objc func didPan(_ pan: UIPanGestureRecognizer) {
-        guard isScrollEnabled && numberOfItems > 0 else {
-            return
-        }
+        guard isScrollEnabled && numberOfItems > 0 else { return }
         switch pan.state {
         case .began:
             isDragging = true
@@ -93,12 +93,12 @@ extension iCarousel {
             let _velocity = pan.velocity(in: self)
             let translation = isVertical ? _translation.y: _translation.x
             let velocity = isVertical ? _velocity.y: _velocity.x
-            
+
             var factor: CGFloat = 1.0
             if !isWrapEnabled && bounces {
                 factor = 1.0 - min(abs(scrollOffset - clamped(offset: scrollOffset)), bounceDistance) / bounceDistance
             }
-            
+
             state.startVelocity = -velocity * factor * scrollSpeed / itemWidth
             _scrollOffset -= (translation - state.previousTranslation) * factor * offsetMultiplier / itemWidth
             state.previousTranslation = translation
@@ -200,7 +200,7 @@ extension iCarousel {
                 }
                 _viewClass = viewClass.superclass()
             }
-            
+
         }
         if let superView = view.superview {
             return viewOrSuperview(superView, implementsSelector: selector)

@@ -12,7 +12,7 @@ import UIKit
 extension iCarousel {
     func startAnimation() {
         if self.timer == nil {
-            let timer = Timer(timeInterval: 1.0/60.0, repeats: true) { [weak self] (timer) in
+            let timer = Timer(timeInterval: 1.0/60.0, repeats: true) { [weak self] (_) in
                 guard let self = self else { return }
                 self.transactionAnimated(false) {
                     self.step()
@@ -73,10 +73,10 @@ extension iCarousel {
             }
         }
         distance = state.endOffset - state.startOffset
-        
+
         state.startTime = CACurrentMediaTime()
         state.scrollDuration = TimeInterval(abs(distance) / abs(0.5 * state.startVelocity))
-        
+
         if distance != 0.0 {
             isDecelerating = true
             startAnimation()
@@ -88,6 +88,8 @@ extension iCarousel {
     }
 }
 extension iCarousel {
+    // swiftlint:disable cyclomatic_complexity
+    // swiftlint:disable function_body_length
     @objc private func step() {
         let currentTime = CACurrentMediaTime()
         var delta = CGFloat(currentTime - state.lastTime)
@@ -118,7 +120,7 @@ extension iCarousel {
                 transactionAnimated(true) {
                     delegate?.carouselDidEndDecelerating(self)
                 }
-                
+
                 if (scrollToItemBoundary || abs(scrollOffset - clamped(offset: scrollOffset)) > floatErrorMargin) && !canAutoscroll {
                     if abs(scrollOffset - CGFloat(self.currentItemIndex)) < floatErrorMargin {
                         //call scroll to trigger events for legacy support reasons
@@ -130,9 +132,9 @@ extension iCarousel {
                 } else {
                     var difference = round(scrollOffset) - scrollOffset
                     if difference > 0.5 {
-                        difference = difference - 1.0
+                        difference -= 1.0
                     } else if difference < -0.5 {
-                        difference = 1.0 + difference
+                        difference += 1.0
                     }
                     let maxToggleDuration = iCarousel.global.maxToggleDuration
                     state.toggleTime = TimeInterval(CGFloat(currentTime) - maxToggleDuration * abs(difference))
@@ -182,7 +184,7 @@ extension iCarousel {
                 state.startVelocity = 0.0
             }
         }
-        
+
         //check if index has changed
         let difference = minScrollDistance(fromIndex: self.currentItemIndex, toIndex: state.previousItemIndex)
         if difference != 0 {
@@ -199,7 +201,7 @@ extension iCarousel {
                 delegate?.carouselDidScroll(self)
             }
         }
-        
+
         //notify delegate of index change
         if state.previousItemIndex != self.currentItemIndex {
             transactionAnimated(true) {
