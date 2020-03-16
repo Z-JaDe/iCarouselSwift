@@ -60,20 +60,20 @@ extension iCarousel {
             transactionAnimated(true) {
                 delegate?.carouselDidEndDragging(self, willDecelerate: isDecelerating)
             }
-            ///不需要减速 可以往下走
+            // 不需要减速 可以往下走
             guard !isDecelerating else {
                 transactionAnimated(true) {
                     delegate?.carouselWillBeginDecelerating(self)
                 }
                 break
             }
-            /// isPagingEnabled优先级比 scrollToItemBoundary高
+            // isPagingEnabled优先级比 scrollToItemBoundary高
             if isPagingEnabled {
                 scrollToItem(at: self.currentItemIndex, animated: true)
                 break
             }
             let floatErrorMargin = iCarousel.global.floatErrorMargin
-            /// 滚动到Item边界
+            // 滚动到Item边界
             guard (scrollToItemBoundary || abs(scrollOffset - clamped(offset: scrollOffset)) > floatErrorMargin) && !canAutoscroll else {
                 depthSortViews()
                 break
