@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public protocol iCarouselDelegate: class {
+public protocol iCarouselDelegate: AnyObject {
     func carouselWillBeginScrollingAnimation(_ carousel: iCarousel)
     func carouselDidEndScrollingAnimation(_ carousel: iCarousel)
     func carouselDidScroll(_ carousel: iCarousel)

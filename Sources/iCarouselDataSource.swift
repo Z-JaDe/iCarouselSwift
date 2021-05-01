@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public protocol iCarouselDataSource: class {
+public protocol iCarouselDataSource: AnyObject {
     func numberOfItems(in carousel: iCarousel) -> Int
     func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusingView: UIView?) -> UIView
 
