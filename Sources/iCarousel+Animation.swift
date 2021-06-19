@@ -123,8 +123,8 @@ extension iCarousel {
 
                 if (scrollToItemBoundary || abs(scrollOffset - clamped(offset: scrollOffset)) > floatErrorMargin) && !canAutoscroll {
                     if abs(scrollOffset - CGFloat(self.currentItemIndex)) < floatErrorMargin {
-                        //call scroll to trigger events for legacy support reasons
-                        //even though technically we don't need to scroll at all
+                        // call scroll to trigger events for legacy support reasons
+                        // even though technically we don't need to scroll at all
                         scrollToItem(at: self.currentItemIndex, duration: 0.01)
                     } else {
                         scrollToItem(at: self.currentItemIndex, animated: true)
@@ -142,7 +142,7 @@ extension iCarousel {
                 }
             }
         } else if canAutoscroll && !isDragging {
-            //autoscroll goes backwards from what you'd expect, for historical reasons
+            // autoscroll goes backwards from what you'd expect, for historical reasons
             if self.isPagingEnabled {
                 state.tempOnePageValue += delta * autoscroll
                 if abs(state.tempOnePageValue) >= 1 {
@@ -185,7 +185,7 @@ extension iCarousel {
             }
         }
 
-        //check if index has changed
+        // check if index has changed
         let difference = minScrollDistance(fromIndex: self.currentItemIndex, toIndex: state.previousItemIndex)
         if difference != 0 {
             state.toggleTime = CACurrentMediaTime()
@@ -195,21 +195,21 @@ extension iCarousel {
         loadUnloadViews()
         transformItemViews()
         let floatErrorMargin = iCarousel.global.floatErrorMargin
-        //notify delegate of offset change
+        // notify delegate of offset change
         if abs(scrollOffset - state.previousScrollOffset) > floatErrorMargin {
             transactionAnimated(true) {
                 delegate?.carouselDidScroll(self)
             }
         }
 
-        //notify delegate of index change
+        // notify delegate of index change
         if state.previousItemIndex != self.currentItemIndex {
             transactionAnimated(true) {
                 delegate?.carouselCurrentItemIndexDidChange(self)
             }
         }
 
-        //update previous index
+        // update previous index
         state.previousScrollOffset = _scrollOffset
         state.previousItemIndex = self.currentItemIndex
     }

@@ -49,7 +49,7 @@ extension iCarousel {
             let view: UIView = createView(at: index)
             setItemView(view, forIndex: index)
             if let containerView = containerView {
-                //set container frame
+                // set container frame
                 if isVertical {
                     containerView.bounds.size.width = view.frame.size.width
                     containerView.bounds.size.height = min(itemWidth, view.frame.size.height)
@@ -103,23 +103,23 @@ extension iCarousel {
         }
     }
     func reloadData() {
-        //remove old views
+        // remove old views
         itemViews.values.forEach { (view) in
             view.itemCell?.removeFromSuperview()
         }
-        //bail out if not set up yet
+        // bail out if not set up yet
         guard let dataSource = dataSource else { return }
-        //get number of items and placeholders
+        // get number of items and placeholders
         numberOfVisibleItems = 0
         numberOfItems = dataSource.numberOfItems(in: self)
         numberOfPlaceholders = dataSource.numberOfPlaceholders(in: self)
-        //reset view pools
+        // reset view pools
         self.itemViews = [:]
         self.itemViewPool = []
         self.placeholderViewPool = []
-        //layout views
+        // layout views
         self.setNeedsLayout()
-        //fix scroll offset
+        // fix scroll offset
         if numberOfItems > 0 && scrollOffset < 0.0 {
             scrollToItem(at: 0, animated: numberOfPlaceholders > 0)
         }
@@ -127,11 +127,11 @@ extension iCarousel {
 }
 extension iCarousel {
     func createItemCell(_ view: UIView, index: Int) -> ItemCell {
-        //set item width
+        // set item width
         if itemWidth <= 0 {
             self.itemWidth = view._relativeWidth(isVertical)
         }
-        //set container frame
+        // set container frame
         var frame = view.bounds
         frame.size.width = isVertical ? frame.size.width : itemWidth
         frame.size.height = isVertical ? itemWidth: frame.size.height

@@ -20,7 +20,7 @@ extension iCarousel {
 }
 extension iCarousel {
     @objc func didTap(_ tap: UITapGestureRecognizer) {
-        //check for tapped view
+        // check for tapped view
         if let itemView = self.itemView(at: tap.location(in: contentView)),
             let index = self.index(of: itemView) {
             if delegate == nil || delegate!.carousel(self, shouldSelectItemAt: index) {
@@ -79,10 +79,10 @@ extension iCarousel {
                 break
             }
             if abs(scrollOffset - CGFloat(self.currentItemIndex)) < floatErrorMargin {
-                //call scroll to trigger events for legacy support reasons
-                //even though technically we don't need to scroll at all
+                // call scroll to trigger events for legacy support reasons
+                // even though technically we don't need to scroll at all
                 scrollToItem(at: self.currentItemIndex, duration: 0.01)
-            } else if shouldScroll() { //是否需要滚动
+            } else if shouldScroll() { // 是否需要滚动
                 let direction = Int(state.startVelocity / abs(state.startVelocity))
                 scrollToItem(at: self.currentItemIndex + direction, animated: true)
             } else {
@@ -119,7 +119,7 @@ extension iCarousel: UIGestureRecognizerDelegate {
         case _ as UITapGestureRecognizer:
             var index = viewOrSuperviewIndex(touch.view)
             if index == nil, centerItemWhenSelected {
-                //view is a container view
+                // view is a container view
                 index = viewOrSuperviewIndex(touch.view?.subviews.last)
             }
             if index != nil {
@@ -148,7 +148,7 @@ extension iCarousel: UIGestureRecognizerDelegate {
     public override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         switch gestureRecognizer {
         case let pan as UIPanGestureRecognizer:
-            //ignore vertical swipes
+            // ignore vertical swipes
             let translation = pan.translation(in: self)
             if ignorePerpendicularSwipes {
                 if self.isVertical {
@@ -182,9 +182,9 @@ extension iCarousel {
         guard let view = view, view != contentView else {
             return false
         }
-        //thanks to @mattjgalloway and @shaps for idea
-        //https://gist.github.com/mattjgalloway/6279363
-        //https://gist.github.com/shaps80/6279008
+        // thanks to @mattjgalloway and @shaps for idea
+        // https://gist.github.com/mattjgalloway/6279363
+        // https://gist.github.com/shaps80/6279008
         var _viewClass: AnyClass? = type(of: view)
         while let viewClass = _viewClass, viewClass != UIView.self {
             var numberOfMethods: UInt32 = 0

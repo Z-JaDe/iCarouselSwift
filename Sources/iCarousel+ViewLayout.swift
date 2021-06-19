@@ -39,9 +39,9 @@ extension iCarousel {
     }
 }
 extension iCarousel {
-    ///计算相对于当前Item的偏移量
+    /// 计算相对于当前Item的偏移量
     public func offsetForItem(at index: Int) -> CGFloat {
-        //calculate relative position
+        // calculate relative position
         var offset = CGFloat(index) - scrollOffset
         if isWrapEnabled {
             let numberOfItems = CGFloat(self.numberOfItems)
@@ -57,26 +57,26 @@ extension iCarousel {
 extension iCarousel {
     /// 更新itemView对应的ItemCell的形变透明度等参数
     func transformItemView(_ itemView: UIView, at index: Int) {
-        //calculate offset
+        // calculate offset
         let offset = offsetForItem(at: index)
 
         guard let cell = itemView.itemCell else {
             itemView.layoutIfNeeded()
             return
         }
-        //update alpha
+        // update alpha
         cell.layer.opacity = Float(animator.alphaForItem(with: offset))
-        //center view
+        // center view
         cell.center = CGPoint(x: self.bounds.size.width/2.0 + contentOffset.width,
                                        y: self.bounds.size.height/2.0 + contentOffset.height)
-        //enable/disable interaction
+        // enable/disable interaction
         cell.isUserInteractionEnabled = (!centerItemWhenSelected || index == self.currentItemIndex)
-        //account for retina
+        // account for retina
         cell.layer.rasterizationScale = UIScreen.main.scale
 
         itemView.layoutIfNeeded()
 
-        //special-case logic for CoverFlow2
+        // special-case logic for CoverFlow2
         let clampedOffset = max(-1.0, min(1.0, offset))
         if isDecelerating ||
             (isScrolling && !isDragging && !state.didDrag) ||
@@ -89,19 +89,19 @@ extension iCarousel {
             }
         }
 
-        //calculate transform
+        // calculate transform
         let transform = animator.transformForItemView(with: offset, in: self)
-        //transform view
+        // transform view
         cell.layer.transform = transform
 
-        //backface culling
+        // backface culling
         var showBackfaces = itemView.layer.isDoubleSided
         if showBackfaces {
             showBackfaces = animator.showBackfaces(view: itemView, in: self)
         }
 
-        //we can't just set the layer.doubleSided property because it doesn't block interaction
-        //instead we'll calculate if the view is front-facing based on the transform
+        // we can't just set the layer.doubleSided property because it doesn't block interaction
+        // instead we'll calculate if the view is front-facing based on the transform
         cell.isHidden = !(showBackfaces ? showBackfaces : (transform.m33 > 0.0))
     }
     func transformItemViews() {
@@ -136,7 +136,7 @@ extension iCarousel {
         updateNumberOfVisibleItems()
         state.previousScrollOffset = self.scrollOffset
         offsetMultiplier = animator.offsetMultiplier
-        //align
+        // align
         if !isScrolling && !isDecelerating && !canAutoscroll {
             if scrollToItemBoundary && self.currentItemIndex != -1 {
                 scrollToItem(at: self.currentItemIndex, animated: true)
@@ -144,7 +144,7 @@ extension iCarousel {
                 _scrollOffset = clamped(offset: scrollOffset)
             }
         }
-        //update views
+        // update views
         didScroll()
     }
 }

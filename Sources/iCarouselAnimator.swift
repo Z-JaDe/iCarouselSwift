@@ -16,7 +16,7 @@ extension iCarousel {
         open internal(set) var fadeMinAlpha: CGFloat = 0.0
         open internal(set) var spacing: CGFloat = 1.0
         open internal(set) var arc: CGFloat = .pi * 2.0
-        ///是否无限循环
+        /// 是否无限循环
         open internal(set) var isWrapEnabled: Bool = false
         /// 拖动时，视图移动速度
         open internal(set) var offsetMultiplier: CGFloat = 1.0
@@ -25,7 +25,7 @@ extension iCarousel {
         }
         open func configInit() {
         }
-        ///根据 offset计算alpha
+        /// 根据 offset计算alpha
         open func alphaForItem(with offset: CGFloat) -> CGFloat {
             let factor: CGFloat
             if offset > fadeMax {
@@ -37,7 +37,7 @@ extension iCarousel {
             }
             return 1.0 - min(factor, fadeRange) / fadeRange * (1.0 - fadeMinAlpha)
         }
-        ///根据 offset计算CATransform3D
+        /// 根据 offset计算CATransform3D
         open func transformForItemView(with offset: CGFloat, in carousel: iCarousel) -> CATransform3D {
             var transform: CATransform3D = CATransform3DIdentity
             transform.m34 = carousel.perspective

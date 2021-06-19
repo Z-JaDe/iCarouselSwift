@@ -25,8 +25,9 @@ extension iCarousel {
     }
 }
 
+// swiftlint:disable type_name
 public class iCarousel: UIView {
-    ///一些滚动过程中临时保存的值
+    /// 一些滚动过程中临时保存的值
     struct State {
         var startTime: TimeInterval = 0
         var lastTime: TimeInterval = 0
@@ -40,7 +41,7 @@ public class iCarousel: UIView {
         var toggleTime: TimeInterval = 0
         var previousTranslation: CGFloat = 0
         var didDrag: Bool = false
-        ///如果isPagingEnabled为true 且 canAutoscroll 为true，自动滚动需要隔段时间滚动一次
+        /// 如果isPagingEnabled为true 且 canAutoscroll 为true，自动滚动需要隔段时间滚动一次
         var tempOnePageValue: CGFloat = 0
     }
     internal var state: State = State()
@@ -165,7 +166,7 @@ public class iCarousel: UIView {
     public func configInit() {
         self.addSubview(contentView)
         setupGesture()
-        //set up accessibility
+        // set up accessibility
         self.accessibilityTraits = .allowsDirectInteraction
         self.isAccessibilityElement = true
         if dataSource != nil {
