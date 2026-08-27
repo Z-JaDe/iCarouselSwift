@@ -1,3 +1,5 @@
+
+
 # iCarouselSwift
 
 [![CI Status](https://travis-ci.org/Z-JaDe/iCarouselSwift.svg?branch=master)](https://travis-ci.com/Z-JaDe/iCarouselSwift)
@@ -6,3 +8,11 @@
 
 iCarousel 无限轮播 支持3D各种动画
 支持自动滚动等功能
+
+## Usage
+```swift
+carousel.animator = iCarousel.Animator.Linear().wrapEnabled(true)
+carousel.delegate = self
+carousel.dataSource = self
+carousel.isPagingEnabled = true
+```
